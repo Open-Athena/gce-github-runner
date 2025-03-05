@@ -179,7 +179,11 @@ function start_vm {
     gcloud_auth
   fi
 
-  RUNNER_TOKEN=$(curl -S -s -XPOST \
+  echo "✅ Authenticated"
+
+
+
+  RUNNER_TOKEN=$(curl -v -XPOST \
       -H "authorization: Bearer ${token}" \
       https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runners/registration-token |\
       jq -r .token)
