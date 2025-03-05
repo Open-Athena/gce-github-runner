@@ -41,6 +41,7 @@ maintenance_policy_terminate=
 arm=
 accelerator=
 min_cpu_platform_flag=
+keep_runner=
 
 OPTLIND=1
 while getopts_long :h opt \
@@ -69,6 +70,7 @@ while getopts_long :h opt \
   maintenance_policy_terminate optional_argument \
   accelerator optional_argument \
   min_cpu_platform optional_argument \
+  keep_runner optional_argument \
   help no_argument "" "$@"
 do
   case "$opt" in
@@ -147,6 +149,9 @@ do
     min_cpu_platform)
       min_cpu_platform_flag=--min-cpu-platform="$OPTLARG"
       ;;
+    keep_runner)
+      keep_runner=$OPTLARG
+      ;;
     h|help)
       usage
       exit 0
@@ -161,7 +166,7 @@ done
 
 function gcloud_auth {
   # NOTE: when --project is specified, it updates the config
-  echo ${service_account_key} | gcloud --project  ${project_id} --quiet auth activate-service-account --key-file - &>/dev/null
+  echo ${service_account_key} | gcloud --project  ${project_id} auth activate-service-account --key-file - &>/dev/null
   echo "✅ Successfully configured gcloud."
 }
 
@@ -195,6 +200,7 @@ function start_vm {
   accelerator=$([[ ! -z "${accelerator}"  ]] && echo "--accelerator=${accelerator} --maintenance-policy=TERMINATE" || echo "")
   maintenance_policy_flag=$([[ -z "${maintenance_policy_terminate}"  ]] || echo "--maintenance-policy=TERMINATE" )
 
+
   echo "The new GCE VM will be ${VM_ID}"
 
   startup_script="
@@ -220,6 +226,10 @@ function start_vm {
 
 	cat <<-EOF > /usr/bin/gce_runner_shutdown.sh
 	#!/bin/sh
+  if [[ "${keep_runner}" == "true" ]]; then
+    echo \"✅ Keep runner is enabled, won't delete the runner.\"
+    exit 0
+  fi
 	echo \"✅ Self deleting $VM_ID in ${machine_zone} in ${shutdown_timeout} seconds ...\"
 	# We tear down the machine by starting the systemd service that was registered by the startup script
 	systemctl start shutdown.service
