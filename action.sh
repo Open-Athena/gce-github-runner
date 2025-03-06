@@ -166,7 +166,6 @@ done
 
 function gcloud_auth {
   # NOTE: when --project is specified, it updates the config
-  echo ${service_account_key} | head -c 128 | base64
   echo ${service_account_key} | gcloud --project ${project_id} auth activate-service-account --key-file -
   echo "✅ Successfully configured gcloud."
 }
@@ -181,8 +180,6 @@ function start_vm {
   fi
 
   echo "✅ Authenticated"
-
-
 
   RUNNER_TOKEN=$(curl -v -XPOST \
       -H "authorization: Bearer ${token}" \
