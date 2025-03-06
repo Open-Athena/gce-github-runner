@@ -166,6 +166,8 @@ done
 
 function gcloud_auth {
   # NOTE: when --project is specified, it updates the config
+  echo ${service_account_key} | head -c 10
+  echo ${service_account_key} | tail -c 10
   echo ${service_account_key} | gcloud --project ${project_id} auth activate-service-account --key-file -
   echo "✅ Successfully configured gcloud."
 }
