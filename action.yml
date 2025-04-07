@@ -141,3 +141,11 @@ runs:
         --arm=${{ inputs.arm }}
         --min_cpu_platform='${{ inputs.min_cpu_platform }}'
       shell: bash
+    - name: "Shutdown on cancellation"
+      run: >
+        ${{ github.action_path }}/action.sh
+        --command=stop
+        --project_id=${{ inputs.project_id }}
+        --service_account_key='${{ inputs.service_account_key }}'
+      if: ${{ cancelled() }}
+      shell: bash

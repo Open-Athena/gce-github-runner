@@ -335,13 +335,30 @@ function start_vm {
   fi
 }
 
+function stop_vm {
+  echo "Stopping GCE VM ..."
+  if [[ -z "${service_account_key}" ]] || [[ -z "${project_id}" ]]; then
+    echo "Won't authenticate gcloud. If you wish to authenticate gcloud provide both service_account_key and project_id."
+  else
+    echo "Will authenticate gcloud."
+    gcloud_auth
+  fi
+
+  VM_ID="gce-gh-runner-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+
+  gcloud --quiet compute instances delete ${VM_ID} --zone=${machine_zone}
+}
+
 safety_on
 case "$command" in
   start)
     start_vm
     ;;
+  stop)
+    stop_vm
+    ;;
   *)
-    echo "Invalid command: \`${command}\`, valid values: start" >&2
+    echo "Invalid command: \`${command}\`, valid values: start, stop" >&2
     usage
     exit 1
     ;;
