@@ -201,7 +201,7 @@ function start_vm {
   startup_prelude="#!/bin/bash
   set -e
   shutdown() {
-    echo \"Machine setup failed; self deleting $VM_ID in ${machine_zone} ...\"
+    echo ❌ Machine setup failed; self deleting $VM_ID in ${machine_zone} ...
     ${shutdown_command}
   }
   trap shutdown EXIT
