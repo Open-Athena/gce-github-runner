@@ -242,7 +242,7 @@ function start_vm {
 	./svc.sh install && \\
 	./svc.sh start && \\
 	gcloud compute instances add-labels ${VM_ID} --zone=${machine_zone} --labels=gh_ready=1
-	# we cancel any workflows longer than 5 hours (was originally 3 days, the max workflow runtime)
+	# we cancel any workflows longer than 5 hours (was originally 3 days - the max workflow runtime)
 	nohup sh -c \"sleep 5h && ${shutdown_command}\" > /dev/null &
   "
 
