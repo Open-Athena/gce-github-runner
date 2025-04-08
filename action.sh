@@ -282,7 +282,7 @@ function start_vm {
       cd /actions-runner
       curl -o actions-runner-linux-x64-${runner_ver}.tar.gz -L https://github.com/actions/runner/releases/download/v${runner_ver}/actions-runner-linux-x64-${runner_ver}.tar.gz
       tar xzf ./actions-runner-linux-x64-${runner_ver}.tar.gz
-      ./bin/installdependencies.sh
+      ./bin/installdepenfdencies.sh
       $startup_script"
     fi
   fi
