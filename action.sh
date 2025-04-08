@@ -202,7 +202,7 @@ function start_vm {
 
   echo "The new GCE VM will be ${VM_ID}"
 
-  shutdown_command="gcloud compute instances delete $VM_ID --zone=$machine_zone --quiet"
+  shutdown_command="echo would run gcloud compute instances delete $VM_ID --zone=$machine_zone --quiet"
   startup_prelude="#!/bin/bash
   set -e
   shutdown() {
